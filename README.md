@@ -112,11 +112,13 @@ domus-ia/
 ```bash
 cp .env.example .env
 docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
-docker compose exec api node apps/api/dist/scripts/migrate.js
-docker compose exec api node apps/api/dist/scripts/seed.js
 ```
 
 Interfaz en <http://localhost:8080>, API en <http://localhost:3000/api>.
+
+Al arrancar, la API aplica las migraciones y carga los usuarios, catálogos y proyectos de
+demostración si no existen usuarios. En arranques posteriores el seed se omite y conserva
+los datos existentes. Las cuentas de demostración usan la contraseña `Domus2026!`.
 
 En EasyPanel use solamente `docker-compose.yml` y configure el dominio con destino al
 servicio interno `web`, puerto `80`, protocolo HTTP. La API (`api:3000`) y PostgreSQL

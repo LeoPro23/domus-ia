@@ -3,8 +3,8 @@
 #
 #   cp .env.example .env
 #   docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
-#   docker compose exec api node apps/api/dist/scripts/migrate.js
-#   docker compose exec api node apps/api/dist/scripts/seed.js
+# Las migraciones y los datos de demostración se cargan automáticamente al iniciar.
+# El seed se omite cuando la base ya contiene usuarios.
 #
 # EasyPanel: dirigir el dominio al servicio web, puerto interno 80.
 # En local, docker-compose.local.yml publica la API en :3000 y la web en :8080.
@@ -32,6 +32,7 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+    command: ["sh", "-c", "node apps/api/dist/scripts/seed.js && exec node apps/api/dist/main.js"]
     restart: unless-stopped
     depends_on:
       db:
