@@ -111,16 +111,19 @@ domus-ia/
 
 ```bash
 cp .env.example .env
-docker compose up --build
+docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
 docker compose exec api node apps/api/dist/scripts/migrate.js
 docker compose exec api node apps/api/dist/scripts/seed.js
 ```
 
 Interfaz en <http://localhost:8080>, API en <http://localhost:3000/api>.
 
-> El archivo `docker-compose.yml` y los `Dockerfile` no pudieron ejecutarse en el entorno de
-> desarrollo usado para construir el MVP (sin Docker disponible); se validaron las imágenes
-> de forma estática. La ruta sin contenedores (PGlite) sí fue ejecutada y verificada.
+En EasyPanel use solamente `docker-compose.yml` y configure el dominio con destino al
+servicio interno `web`, puerto `80`, protocolo HTTP. La API (`api:3000`) y PostgreSQL
+(`db:5432`) se comunican por la red interna, sin publicar puertos del servidor.
+
+`docker-compose.local.yml` publica los puertos únicamente en `127.0.0.1` para desarrollo.
+No lo incluya en EasyPanel.
 
 ## 7. Variables de entorno
 

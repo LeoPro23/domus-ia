@@ -1,0 +1,12 @@
+.git/
+**/node_modules/
+**/dist/
+**/*.tsbuildinfo
+.pnpm-store/
+.tmp/
+data/
+apps/api/data/
+.env
+.env.*
+!.env.example
+**/*.log

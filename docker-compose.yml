@@ -2,11 +2,12 @@
 # Domus IA - despliegue con PostgreSQL administrado por el propio Compose.
 #
 #   cp .env.example .env
-#   docker compose up --build
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
 #   docker compose exec api node apps/api/dist/scripts/migrate.js
 #   docker compose exec api node apps/api/dist/scripts/seed.js
 #
-# La API queda en http://localhost:3000/api y la interfaz en http://localhost:8080
+# EasyPanel: dirigir el dominio al servicio web, puerto interno 80.
+# En local, docker-compose.local.yml publica la API en :3000 y la web en :8080.
 # ---------------------------------------------------------------------------
 services:
   db:
@@ -16,8 +17,8 @@ services:
       POSTGRES_USER: domus
       POSTGRES_PASSWORD: domus
       POSTGRES_DB: domus
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./apps/api/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
@@ -45,8 +46,8 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_BASE_URL: ${LLM_BASE_URL:-https://api.openai.com/v1}
       LLM_MODEL: ${LLM_MODEL:-gpt-4o-mini}
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
 
   web:
     build:
@@ -55,8 +56,8 @@ services:
     restart: unless-stopped
     depends_on:
       - api
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
 
 volumes:
   db-data:
